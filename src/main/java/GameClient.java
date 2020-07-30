@@ -6,7 +6,7 @@ public class GameClient extends JComponent {
 
     private int screenwidth;
     private int screenheight;
-
+    private boolean stop;
     private Tank playerTank;
 
     GameClient() {
@@ -20,6 +20,18 @@ public class GameClient extends JComponent {
         this.setPreferredSize(new Dimension(screenwidth, screenheight));
         // initial
         init();
+
+        //Thread 一進程式就call repaint()
+        new Thread(() -> {
+            while (!stop){
+                repaint();
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     public void init() {
@@ -57,23 +69,24 @@ public class GameClient extends JComponent {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
                 playerTank.setDirection(Direction.UP);
-                playerTank.setY(playerTank.getY() - 5);
+                //playerTank.setY(playerTank.getY() - 5);
+                playerTank.setY(playerTank.getY() - playerTank.getSpeed());
                 break;
             case KeyEvent.VK_DOWN:
                 playerTank.setDirection(Direction.DOWN);
-                playerTank.setY(playerTank.getY() + 5);
+                playerTank.setY(playerTank.getY() + playerTank.getSpeed());
                 break;
             case KeyEvent.VK_LEFT:
                 playerTank.setDirection(Direction.LEFT);
-                playerTank.setX(playerTank.getX() - 5);
+                playerTank.setX(playerTank.getX() - playerTank.getSpeed());
                 break;
             case KeyEvent.VK_RIGHT:
                 playerTank.setDirection(Direction.RIGHT);
-                playerTank.setX(playerTank.getX() + 5);
+                playerTank.setX(playerTank.getX() + playerTank.getSpeed());
                 break;
             default:;
         }
         // call paintComponent method
-        this.repaint();
+        //this.repaint();       --> 改用 Thread
     }
 }

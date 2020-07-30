@@ -16,7 +16,7 @@ public class TankGame {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        gameClient.repaint();
+        //gameClient.repaint();  //改用 Thread
 
         // 按鍵偵測
         frame.addKeyListener(new KeyAdapter() {
