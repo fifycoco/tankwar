@@ -24,8 +24,10 @@ public class GameClient extends JComponent {
         //Thread 一進程式就call repaint()
         new Thread(() -> {
             while (!stop){
+                // 一直更新坦克圖形
                 repaint();
                 try {
+                    // sleep 50 milesecone (每50毫秒更新一次)
                     Thread.sleep(50);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -70,22 +72,27 @@ public class GameClient extends JComponent {
             case KeyEvent.VK_UP:
                 playerTank.setDirection(Direction.UP);
                 //playerTank.setY(playerTank.getY() - 5);
-                playerTank.setY(playerTank.getY() - playerTank.getSpeed());
+
+                // 改用 Tank.move method
+                //playerTank.setY(playerTank.getY() - playerTank.getSpeed());
                 break;
             case KeyEvent.VK_DOWN:
                 playerTank.setDirection(Direction.DOWN);
-                playerTank.setY(playerTank.getY() + playerTank.getSpeed());
+                //playerTank.setY(playerTank.getY() + playerTank.getSpeed());
                 break;
             case KeyEvent.VK_LEFT:
                 playerTank.setDirection(Direction.LEFT);
-                playerTank.setX(playerTank.getX() - playerTank.getSpeed());
+                //playerTank.setX(playerTank.getX() - playerTank.getSpeed());
                 break;
             case KeyEvent.VK_RIGHT:
                 playerTank.setDirection(Direction.RIGHT);
-                playerTank.setX(playerTank.getX() + playerTank.getSpeed());
+                //playerTank.setX(playerTank.getX() + playerTank.getSpeed());
                 break;
             default:;
         }
+
+        playerTank.move();
+
         // call paintComponent method
         //this.repaint();       --> 改用 Thread
     }
