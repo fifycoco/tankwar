@@ -12,7 +12,7 @@ public class TankGame {
         frame.setTitle("TankWar");
         frame.setVisible(true);
 
-        frame.pack();
+        frame.pack();  //
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
