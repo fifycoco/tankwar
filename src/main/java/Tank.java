@@ -19,6 +19,23 @@ public class Tank {
         speed = 5;
     }
 
+    public void draw(Graphics g){
+        if (!isStop()) {
+            determineDirection();
+            move();
+        }
+        g.drawImage(getImage(),x,y,null);
+    }
+
+    public boolean isStop(){
+        for (int i =0; i < dirs.length; i++){
+            // 只要有一個按鍵方向為true, 就不停
+            if (dirs[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
 
     // P.22 新增坦克move method
     public void move(){
@@ -53,6 +70,18 @@ public class Tank {
                 break;
             default:
         }
+    }
+
+    private void determineDirection(){
+        //0.上 1.下 2.左 3.右
+        if (dirs[0] && dirs[2] && !dirs[1] && !dirs[3]) direction = Direction.UP_LEFT;
+        else if (dirs[0] && dirs[3] && !dirs[2] && !dirs[1]) direction = Direction.UP_RIGHT;
+        else if (dirs[1] && dirs[2] && !dirs[0] && !dirs[3]) direction = Direction.DOWN_LEFT;
+        else if (dirs[1] && dirs[3] && !dirs[0] && !dirs[2]) direction = Direction.DOWN_RIGHT;
+        else if (dirs[0] && !dirs[3] && !dirs[1] && !dirs[2]) direction = Direction.UP;
+        else if (dirs[1] && !dirs[3] && !dirs[0] && !dirs[2]) direction = Direction.DOWN;
+        else if (dirs[2] && !dirs[3] && !dirs[0] && !dirs[1]) direction = Direction.LEFT;
+        else if (dirs[3] && !dirs[1] && !dirs[0] && !dirs[2]) direction = Direction.RIGHT;
     }
 
     public Image getImage(){
