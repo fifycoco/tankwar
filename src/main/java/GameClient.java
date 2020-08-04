@@ -10,11 +10,14 @@ public class GameClient extends JComponent {
     private int screenwidth;
     private int screenheight;
     private boolean stop;
+
+    // 我方坦克
     private Tank playerTank;
 
     //敵方坦克
     private List<Tank> enemyTanks = new ArrayList<>();
 
+    //Walls
     private List<Wall> walls = new ArrayList<>();
 
     GameClient() {
@@ -58,13 +61,17 @@ public class GameClient extends JComponent {
         }
 
         // wall
-        Wall[] walls = {
-                new Wall(250, 150, true, 15),
-                new Wall(150, 200, false, 15),
-                new Wall(800, 200, false, 15),
-        };
-        this.walls.addAll(Arrays.asList(walls));
-
+        Image icon;
+        icon = Tools.getImage("brick.png");
+//        Wall[] walls = {
+//                new Wall(250, 150, true, 15, icon),
+//                new Wall(150, 200, false, 15, icon),
+//                new Wall(800, 200, false, 15, icon),
+//        };
+//        this.walls.addAll(Arrays.asList(walls));
+        this.walls.add(new Wall(250, 150, true, 15, icon));
+        this.walls.add(new Wall(150, 200, false, 15, icon));
+        this.walls.add(new Wall(800, 200, false, 15, icon));
 
     }
 
