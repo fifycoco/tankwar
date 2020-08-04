@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class GameClient extends JComponent {
@@ -14,6 +15,7 @@ public class GameClient extends JComponent {
     //敵方坦克
     private List<Tank> enemyTanks = new ArrayList<>();
 
+    private List<Wall> walls = new ArrayList<>();
 
     GameClient() {
         //this.setPreferredSize(new Dimension(800,600));
@@ -29,7 +31,7 @@ public class GameClient extends JComponent {
 
         //Thread 一進程式就call repaint()
         new Thread(() -> {
-            while (!stop){
+            while (!stop) {
                 // 一直更新坦克圖形
                 repaint();
                 try {
@@ -49,12 +51,19 @@ public class GameClient extends JComponent {
         playerTank = new Tank(500, 100, Direction.DOWN);
 
         // 敵方坦克數及圖形
-        for (int i=0; i<3 ; i++){
-            for (int j=0; j<4; j++){
-                enemyTanks.add(new Tank(350+j*80, 500+i*80, Direction.UP,true));
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 4; j++) {
+                enemyTanks.add(new Tank(350 + j * 80, 500 + i * 80, Direction.UP, true));
             }
         }
 
+        // wall
+        Wall[] walls = {
+                new Wall(250, 150, true, 15),
+                new Wall(150, 200, false, 15),
+                new Wall(800, 200, false, 15),
+        };
+        this.walls.addAll(Arrays.asList(walls));
     }
 
     @Override
@@ -73,8 +82,13 @@ public class GameClient extends JComponent {
         playerTank.draw(g);
 
         // 敵方坦克
-        for (Tank tank:enemyTanks){
+        for (Tank tank : enemyTanks) {
             tank.draw(g);
+        }
+
+        // Walls
+        for (Wall wall : walls){
+            wall.draw(g);
         }
     }
 
@@ -92,7 +106,7 @@ public class GameClient extends JComponent {
         boolean[] dirs = playerTank.getDirs();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                dirs[0]=true;
+                dirs[0] = true;
 
                 // 改用 dirs[]
                 //playerTank.setDirection(Direction.UP);
@@ -103,21 +117,22 @@ public class GameClient extends JComponent {
                 //playerTank.setY(playerTank.getY() - playerTank.getSpeed());
                 break;
             case KeyEvent.VK_DOWN:
-                dirs[1]=true;
+                dirs[1] = true;
                 //playerTank.setDirection(Direction.DOWN);
                 //playerTank.setY(playerTank.getY() + playerTank.getSpeed());
                 break;
             case KeyEvent.VK_LEFT:
-                dirs[2]=true;
+                dirs[2] = true;
                 //playerTank.setDirection(Direction.LEFT);
                 //playerTank.setX(playerTank.getX() - playerTank.getSpeed());
                 break;
             case KeyEvent.VK_RIGHT:
-                dirs[3]=true;
+                dirs[3] = true;
                 //playerTank.setDirection(Direction.RIGHT);
                 //playerTank.setX(playerTank.getX() + playerTank.getSpeed());
                 break;
-            default:;
+            default:
+                ;
         }
 
         //playerTank.move();
@@ -130,7 +145,7 @@ public class GameClient extends JComponent {
         boolean[] dirs = playerTank.getDirs();
         switch (e.getKeyCode()) {
             case KeyEvent.VK_UP:
-                dirs[0]=false;
+                dirs[0] = false;
 
                 // 改用 dirs[]
                 //playerTank.setDirection(Direction.UP);
@@ -141,21 +156,22 @@ public class GameClient extends JComponent {
                 //playerTank.setY(playerTank.getY() - playerTank.getSpeed());
                 break;
             case KeyEvent.VK_DOWN:
-                dirs[1]=false;
+                dirs[1] = false;
                 //playerTank.setDirection(Direction.DOWN);
                 //playerTank.setY(playerTank.getY() + playerTank.getSpeed());
                 break;
             case KeyEvent.VK_LEFT:
-                dirs[2]=false;
+                dirs[2] = false;
                 //playerTank.setDirection(Direction.LEFT);
                 //playerTank.setX(playerTank.getX() - playerTank.getSpeed());
                 break;
             case KeyEvent.VK_RIGHT:
-                dirs[3]=false;
+                dirs[3] = false;
                 //playerTank.setDirection(Direction.RIGHT);
                 //playerTank.setX(playerTank.getX() + playerTank.getSpeed());
                 break;
-            default:;
+            default:
+                ;
         }
 
         //playerTank.move();
