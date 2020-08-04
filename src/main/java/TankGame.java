@@ -14,6 +14,7 @@ public class TankGame {
 
         frame.pack();  //
 
+        // Program should be closed
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //gameClient.repaint();  //改用 Thread

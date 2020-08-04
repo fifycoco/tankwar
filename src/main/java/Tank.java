@@ -9,7 +9,7 @@ public class Tank {
     // 設定移動速度
     private int speed;
 
-    // 上下左右四個方向
+    // 上下左右四個方向 & create getdirs()
     private boolean[] dirs = new boolean[4];
 
     public Tank(int x, int y, Direction direction) {
