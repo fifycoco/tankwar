@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameClient extends JComponent {
 
@@ -8,6 +10,10 @@ public class GameClient extends JComponent {
     private int screenheight;
     private boolean stop;
     private Tank playerTank;
+
+    //敵方坦克
+    private List<Tank> enemyTanks = new ArrayList<>();
+
 
     GameClient() {
         //this.setPreferredSize(new Dimension(800,600));
@@ -38,7 +44,16 @@ public class GameClient extends JComponent {
 
     public void init() {
         // 指定坦克圖形 by Direction
-        playerTank = new Tank(getCenterPosX(50), getCenterPosY(50), Direction.DOWN);
+        // 中心點
+        //playerTank = new Tank(getCenterPosX(50), getCenterPosY(50), Direction.DOWN);
+        playerTank = new Tank(500, 100, Direction.DOWN);
+
+        // 敵方坦克數及圖形
+        for (int i=0; i<3 ; i++){
+            for (int j=0; j<4; j++){
+                enemyTanks.add(new Tank(350+j*80, 500+i*80, Direction.UP,true));
+            }
+        }
 
     }
 
@@ -56,6 +71,11 @@ public class GameClient extends JComponent {
 
         //4. 使用 Tank 新增 draw 方法
         playerTank.draw(g);
+
+        // 敵方坦克
+        for (Tank tank:enemyTanks){
+            tank.draw(g);
+        }
     }
 
     // X bar 中點
