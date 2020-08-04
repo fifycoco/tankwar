@@ -64,6 +64,8 @@ public class GameClient extends JComponent {
                 new Wall(800, 200, false, 15),
         };
         this.walls.addAll(Arrays.asList(walls));
+
+
     }
 
     @Override
