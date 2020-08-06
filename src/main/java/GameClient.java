@@ -15,10 +15,13 @@ public class GameClient extends JComponent {
     private Tank playerTank;
 
     //敵方坦克
-    private List<Tank> enemyTanks = new ArrayList<>();
+    //private List<Tank> enemyTanks = new ArrayList<>();
 
     //Walls
-    private List<Wall> walls = new ArrayList<>();
+    //private List<Wall> walls = new ArrayList<>();
+
+    //取代 敵方坦克 & Walls
+    private List<GameObject> gameObjects = new ArrayList<>();
 
     GameClient() {
         //this.setPreferredSize(new Dimension(800,600));
@@ -48,30 +51,47 @@ public class GameClient extends JComponent {
     }
 
     public void init() {
+        //Image icon;
         // 指定坦克圖形 by Direction
         // 中心點
         //playerTank = new Tank(getCenterPosX(50), getCenterPosY(50), Direction.DOWN);
-        playerTank = new Tank(500, 100, Direction.DOWN);
+        //icon = Tools.getImage("itankD.png");
+        //playerTank = new Tank(500, 100, Direction.DOWN,icon );
+
+        //
+        Image[] brickImage = {Tools.getImage("brick.png")};
+        Image[] iTankImage = new Image[8];
+        Image[] eTankImage = new Image[8];
+
+        String[] sub = {"U.png","D.png","L.png","R.png","LU.png","RU.png","LD.png","RD.png"};
+        for (int i=0; i< iTankImage.length; i++){
+            iTankImage[i] = Tools.getImage("iTank"+sub[i]);
+            eTankImage[i] = Tools.getImage("eTank"+sub[i]);
+        }
+
+        // 我方坦克
+        playerTank = new Tank(500, 100, Direction.DOWN,iTankImage );
 
         // 敵方坦克數及圖形
+        //icon = Tools.getImage("etankU.png");
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                enemyTanks.add(new Tank(350 + j * 80, 500 + i * 80, Direction.UP, true));
+                gameObjects.add(new Tank(350 + j * 80, 500 + i * 80, Direction.UP, true,eTankImage));
             }
         }
 
         // wall
-        Image icon;
-        icon = Tools.getImage("brick.png");
+
+        //icon = Tools.getImage("brick.png");
 //        Wall[] walls = {
 //                new Wall(250, 150, true, 15, icon),
 //                new Wall(150, 200, false, 15, icon),
 //                new Wall(800, 200, false, 15, icon),
 //        };
 //        this.walls.addAll(Arrays.asList(walls));
-        this.walls.add(new Wall(250, 150, true, 15, icon));
-        this.walls.add(new Wall(150, 200, false, 15, icon));
-        this.walls.add(new Wall(800, 200, false, 15, icon));
+        gameObjects.add(new Wall(250, 150, true, 15, brickImage));
+        gameObjects.add(new Wall(150, 200, false, 15, brickImage));
+        gameObjects.add(new Wall(800, 200, false, 15, brickImage));
 
     }
 
@@ -90,14 +110,19 @@ public class GameClient extends JComponent {
         //4. 使用 Tank 新增 draw 方法
         playerTank.draw(g);
 
-        // 敵方坦克
-        for (Tank tank : enemyTanks) {
-            tank.draw(g);
-        }
+//        // 敵方坦克
+//        for (Tank tank : enemyTanks) {
+//            tank.draw(g);
+//        }
+//
+//        // Walls
+//        for (Wall wall : walls){
+//            wall.draw(g);
+//        }
 
-        // Walls
-        for (Wall wall : walls){
-            wall.draw(g);
+        //取代 敵方坦克 & Walls
+        for (GameObject object : gameObjects){
+            object.draw(g);
         }
     }
 

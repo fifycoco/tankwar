@@ -1,9 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class Tank {
-    private int x;
-    private int y;
+public class Tank extends GameObject {
+
     private Direction direction;
 
     // 設定移動速度
@@ -15,16 +14,17 @@ public class Tank {
     // 判斷我方或敵方坦克
     private boolean enemy;
 
-    public Tank(int x, int y, Direction direction) {
+    public Tank(int x, int y, Direction direction, Image[] image) {
 //        this.x = x;
 //        this.y = y;
 //        this.direction = direction;
 //        speed = 5;
         //改為call 自己的建構式
-        this(x,y,direction,false);
+        this(x,y,direction,false,image);
     }
 
-    public Tank(int x, int y, Direction direction, boolean enemy) {
+    public Tank(int x, int y, Direction direction, boolean enemy, Image[] image) {
+        super(x,y,image);
         this.x = x;
         this.y = y;
         this.direction = direction;
@@ -37,7 +37,8 @@ public class Tank {
             determineDirection();
             move();
         }
-        g.drawImage(getImage(),x,y,null);
+        // 取代 getImage()
+        g.drawImage(image[direction.ordinal()],x,y,null);
     }
 
     public boolean isStop(){
@@ -97,27 +98,27 @@ public class Tank {
         else if (dirs[3] && !dirs[1] && !dirs[0] && !dirs[2]) direction = Direction.RIGHT;
     }
 
-    public Image getImage(){
-        String name = enemy ? "etank" : "itank";
-        if (direction==Direction.UP){
-            return new ImageIcon("assets/images/"+name+"U.png").getImage();
-        }if (direction==Direction.DOWN){
-            return new ImageIcon("assets/images/"+name+"D.png").getImage();
-        }if (direction==Direction.LEFT){
-            return new ImageIcon("assets/images/"+name+"L.png").getImage();
-        }if (direction==Direction.RIGHT){
-            return new ImageIcon("assets/images/"+name+"R.png").getImage();
-        }if (direction==Direction.UP_RIGHT){
-            return new ImageIcon("assets/images/"+name+"RU.png").getImage();
-        }if (direction==Direction.UP_LEFT){
-            return new ImageIcon("assets/images/"+name+"LU.png").getImage();
-        }if (direction==Direction.DOWN_RIGHT){
-            return new ImageIcon("assets/images/"+name+"RD.png").getImage();
-        }if (direction==Direction.DOWN_LEFT){
-            return new ImageIcon("assets/images/"+name+"LD.png").getImage();
-        }
-        return null;
-    }
+//    public Image getImage(){
+//        String name = enemy ? "etank" : "itank";
+//        if (direction==Direction.UP){
+//            return new ImageIcon("assets/images/"+name+"U.png").getImage();
+//        }if (direction==Direction.DOWN){
+//            return new ImageIcon("assets/images/"+name+"D.png").getImage();
+//        }if (direction==Direction.LEFT){
+//            return new ImageIcon("assets/images/"+name+"L.png").getImage();
+//        }if (direction==Direction.RIGHT){
+//            return new ImageIcon("assets/images/"+name+"R.png").getImage();
+//        }if (direction==Direction.UP_RIGHT){
+//            return new ImageIcon("assets/images/"+name+"RU.png").getImage();
+//        }if (direction==Direction.UP_LEFT){
+//            return new ImageIcon("assets/images/"+name+"LU.png").getImage();
+//        }if (direction==Direction.DOWN_RIGHT){
+//            return new ImageIcon("assets/images/"+name+"RD.png").getImage();
+//        }if (direction==Direction.DOWN_LEFT){
+//            return new ImageIcon("assets/images/"+name+"LD.png").getImage();
+//        }
+//        return null;
+//    }
 
     public boolean[] getDirs() {
         return dirs;
