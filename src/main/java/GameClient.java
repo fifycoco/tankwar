@@ -71,6 +71,7 @@ public class GameClient extends JComponent {
 
         // 我方坦克
         playerTank = new Tank(500, 100, Direction.DOWN,iTankImage );
+        gameObjects.add(playerTank);
 
         // 敵方坦克數及圖形
         //icon = Tools.getImage("etankU.png");
@@ -108,7 +109,7 @@ public class GameClient extends JComponent {
         //g.drawImage(playerTank.getImage(), playerTank.getX(), playerTank.getY(), null);
 
         //4. 使用 Tank 新增 draw 方法
-        playerTank.draw(g);
+        //playerTank.draw(g);
 
 //        // 敵方坦克
 //        for (Tank tank : enemyTanks) {
