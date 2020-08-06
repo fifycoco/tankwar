@@ -50,6 +50,7 @@ public class GameClient extends JComponent {
         }).start();
     }
 
+
     public void init() {
         //Image icon;
         // 指定坦克圖形 by Direction
@@ -98,6 +99,9 @@ public class GameClient extends JComponent {
 
     @Override
     protected void paintComponent(Graphics g) {
+        g.setColor(Color.BLACK);
+        g.fillRect(0,0,getScreenwidth(),getScreenheight());
+
         //super.paintComponent(g);
         //1. 指定圖形, 指定XY
         //g.drawImage(new ImageIcon("assets/images/itankD.png").getImage(),400,100,null);
@@ -125,6 +129,8 @@ public class GameClient extends JComponent {
         for (GameObject object : gameObjects){
             object.draw(g);
         }
+
+
     }
 
     // X bar 中點
@@ -213,5 +219,17 @@ public class GameClient extends JComponent {
 
         // call paintComponent method
         //this.repaint();       --> 改用 Thread
+    }
+
+    public int getScreenwidth() {
+        return screenwidth;
+    }
+
+    public int getScreenheight() {
+        return screenheight;
+    }
+    // 傳回 gameObjects
+    public List<GameObject> getGameObjects(){
+        return gameObjects;
     }
 }

@@ -29,13 +29,14 @@ public class Tank extends GameObject {
         this.y = y;
         this.direction = direction;
         this.enemy = enemy;
-        speed = 5;
+        speed = 15;
     }
 
     public void draw(Graphics g){
         if (!isStop()) {
             determineDirection();
             move();
+            collision();                //負責偵測坦克碰撞
         }
         // 取代 getImage()
         g.drawImage(image[direction.ordinal()],x,y,null);
@@ -53,6 +54,9 @@ public class Tank extends GameObject {
 
     // P.22 新增坦克move method
     public void move(){
+        oldx=x;
+        oldy=y;
+
         switch (direction){
             case UP:
                 y = y - speed;
@@ -84,6 +88,37 @@ public class Tank extends GameObject {
                 break;
             default:
         }
+    }
+
+    // 負責偵測坦克碰撞
+    public void collision(){
+
+        // 2020.08.06 邊界測試
+        if (x<0){
+            x=0;
+        }else if(x>TankGame.gameClient.getScreenwidth()-width){
+            x=TankGame.gameClient.getScreenwidth()-width;
+        }
+
+        if (y<0){
+            y=0;
+        }else if(y>TankGame.gameClient.getScreenheight()-height){
+            y=TankGame.gameClient.getScreenheight()-height;
+        }
+
+
+        for(GameObject object: TankGame.gameClient.getGameObjects()){
+            // 非本身物件
+            if (object != this){
+                // 有碰撞到
+                if (object.getRectangle().intersects(this.getRectangle())){
+                    x=oldx;
+                    y=oldy;
+                    return;
+                }
+            }
+        }
+
     }
 
     private void determineDirection(){
