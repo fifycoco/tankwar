@@ -187,6 +187,9 @@ public class GameClient extends JComponent {
             case KeyEvent.VK_CONTROL:
                 playerTank.fire();
                 break;
+            case KeyEvent.VK_A:
+                playerTank.superFire();
+                break;
             default:
         }
 
