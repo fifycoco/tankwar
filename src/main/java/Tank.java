@@ -3,16 +3,16 @@ import java.awt.*;
 
 public class Tank extends GameObject {
 
-    private Direction direction;
+    protected Direction direction;
 
     // 設定移動速度
-    private int speed;
+    protected int speed;
 
     // 上下左右四個方向 & create getdirs()
-    private boolean[] dirs = new boolean[4];
+    protected boolean[] dirs = new boolean[4];
 
     // 判斷我方或敵方坦克
-    private boolean enemy;
+    protected boolean enemy;
 
     public Tank(int x, int y, Direction direction, Image[] image) {
 //        this.x = x;
@@ -20,30 +20,30 @@ public class Tank extends GameObject {
 //        this.direction = direction;
 //        speed = 5;
         //改為call 自己的建構式
-        this(x,y,direction,false,image);
+        this(x, y, direction, false, image);
     }
 
     public Tank(int x, int y, Direction direction, boolean enemy, Image[] image) {
-        super(x,y,image);
+        super(x, y, image);
         this.x = x;
         this.y = y;
         this.direction = direction;
         this.enemy = enemy;
-        speed = 15;
+        speed = 5;
     }
 
-    public void draw(Graphics g){
+    public void draw(Graphics g) {
         if (!isStop()) {
             determineDirection();
             move();
             collision();                //負責偵測坦克碰撞
         }
         // 取代 getImage()
-        g.drawImage(image[direction.ordinal()],x,y,null);
+        g.drawImage(image[direction.ordinal()], x, y, null);
     }
 
-    public boolean isStop(){
-        for (int i =0; i < dirs.length; i++){
+    public boolean isStop() {
+        for (int i = 0; i < dirs.length; i++) {
             // 只要有一個按鍵方向為true, 就不停
             if (dirs[i]) {
                 return false;
@@ -52,12 +52,20 @@ public class Tank extends GameObject {
         return true;
     }
 
-    // P.22 新增坦克move method
-    public void move(){
-        oldx=x;
-        oldy=y;
+    //
+    public void fire() {
+        Bullet bullet = new Bullet(x + width / 2 - GameClient.bulletImage[0].getWidth(null) / 2,
+                y + height / 2 - GameClient.bulletImage[0].getHeight(null) / 2,
+                direction, enemy, GameClient.bulletImage);
+        TankGame.gameClient.addGameObject(bullet);
+    }
 
-        switch (direction){
+    // P.22 新增坦克move method
+    public void move() {
+        oldx = x;
+        oldy = y;
+
+        switch (direction) {
             case UP:
                 y = y - speed;
                 break;
@@ -91,29 +99,29 @@ public class Tank extends GameObject {
     }
 
     // 負責偵測坦克碰撞
-    public void collision(){
+    public void collision() {
 
         // 2020.08.06 邊界測試
-        if (x<0){
-            x=0;
-        }else if(x>TankGame.gameClient.getScreenwidth()-width){
-            x=TankGame.gameClient.getScreenwidth()-width;
-        }
+//        if (x < 0) {
+//            x = 0;
+//        } else if (x > TankGame.gameClient.getScreenwidth() - width) {
+//            x = TankGame.gameClient.getScreenwidth() - width;
+//        }
+//
+//        if (y < 0) {
+//            y = 0;
+//        } else if (y > TankGame.gameClient.getScreenheight() - height) {
+//            y = TankGame.gameClient.getScreenheight() - height;
+//        }
+        collisionBound();
 
-        if (y<0){
-            y=0;
-        }else if(y>TankGame.gameClient.getScreenheight()-height){
-            y=TankGame.gameClient.getScreenheight()-height;
-        }
-
-
-        for(GameObject object: TankGame.gameClient.getGameObjects()){
+        for (GameObject object : TankGame.gameClient.getGameObjects()) {
             // 非本身物件
-            if (object != this){
+            if (object != this) {
                 // 有碰撞到
-                if (object.getRectangle().intersects(this.getRectangle())){
-                    x=oldx;
-                    y=oldy;
+                if (object.getRectangle().intersects(this.getRectangle())) {
+                    x = oldx;
+                    y = oldy;
                     return;
                 }
             }
@@ -121,7 +129,25 @@ public class Tank extends GameObject {
 
     }
 
-    private void determineDirection(){
+    public boolean collisionBound() {
+        if (x < 0) {
+            x = 0;
+            return true;                // bound
+        } else if (x > TankGame.gameClient.getScreenwidth() - width) {
+            x = TankGame.gameClient.getScreenwidth() - width;
+            return true;                // bound
+        }
+        if (y < 0) {
+            y = 0;
+            return true;                // bound
+        } else if (y > TankGame.gameClient.getScreenheight() - height) {
+            y = TankGame.gameClient.getScreenheight() - height;
+            return true;                // bound
+        }
+        return false;
+    }
+
+    private void determineDirection() {
         //0.上 1.下 2.左 3.右
         if (dirs[0] && dirs[2] && !dirs[1] && !dirs[3]) direction = Direction.UP_LEFT;
         else if (dirs[0] && dirs[3] && !dirs[2] && !dirs[1]) direction = Direction.UP_RIGHT;
@@ -194,4 +220,5 @@ public class Tank extends GameObject {
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
+
 }
