@@ -3,6 +3,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 public class GameClient extends JComponent {
@@ -22,6 +23,8 @@ public class GameClient extends JComponent {
 
     //取代 敵方坦克 & Walls
     private List<GameObject> gameObjects = new ArrayList<>();
+
+    public static Image[] bulletImage = new Image[8];
 
     GameClient() {
         //this.setPreferredSize(new Dimension(800,600));
@@ -68,6 +71,7 @@ public class GameClient extends JComponent {
         for (int i=0; i< iTankImage.length; i++){
             iTankImage[i] = Tools.getImage("iTank"+sub[i]);
             eTankImage[i] = Tools.getImage("eTank"+sub[i]);
+            bulletImage[i] = Tools.getImage("missile"+sub[i]);
         }
 
         // 我方坦克
@@ -130,7 +134,15 @@ public class GameClient extends JComponent {
             object.draw(g);
         }
 
-
+        // 回收資源
+        // 使用迭代器進行移除
+        Iterator<GameObject> iterator = gameObjects.iterator();
+        while (iterator.hasNext()){
+            if (!(iterator.next()).alive){
+                iterator.remove();
+            }
+        }
+        System.out.println(gameObjects.size());
     }
 
     // X bar 中點
@@ -172,8 +184,13 @@ public class GameClient extends JComponent {
                 //playerTank.setDirection(Direction.RIGHT);
                 //playerTank.setX(playerTank.getX() + playerTank.getSpeed());
                 break;
+            case KeyEvent.VK_CONTROL:
+                playerTank.fire();
+                break;
+            case KeyEvent.VK_A:
+                playerTank.superFire();
+                break;
             default:
-                ;
         }
 
         //playerTank.move();
@@ -231,5 +248,10 @@ public class GameClient extends JComponent {
     // 傳回 gameObjects
     public List<GameObject> getGameObjects(){
         return gameObjects;
+    }
+
+    // 新增物件
+    public void addGameObject(GameObject object){
+        gameObjects.add(object);
     }
 }
