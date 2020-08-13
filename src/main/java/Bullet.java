@@ -19,16 +19,21 @@ public class Bullet extends MoveObject {
 //    }
 
     // 負責偵測坦克碰撞
-    public void collision() {
+    public boolean collision() {
         // collsionBound = true 有撞到wall
         if (collisionBound()) {
             alive = false;          //子彈消失
-            return;
+            // 爆炸動畫
+            //TankGame.gameClient.addGameObject(new Explosion(x,y,GameClient.explosionImage));
+            TankGame.gameClient.addGameObject(new Explosion(x+(GameClient.explosionImage[0].getWidth(null)-width)/2,
+                    y+(GameClient.explosionImage[0].getHeight(null)-height)/2,GameClient.explosionImage));
+            return true;
         }
 
         List<GameObject> objects = TankGame.gameClient.getGameObjects();
         for (GameObject object : objects) {
-            if (object == this) {
+            // 子彈不互相扺消, 火花也不偵測
+            if (object == this || object instanceof Bullet || object instanceof Explosion) {
                 continue;
             }
             // 偵測我方坦克
@@ -44,10 +49,14 @@ public class Bullet extends MoveObject {
                 if (object instanceof Tank) {
                     object.alive = false;
                 }
-                return;
+                // 爆炸動畫
+                TankGame.gameClient.addGameObject(new Explosion(x+(GameClient.explosionImage[0].getWidth(null)-width)/2,
+                        y+(GameClient.explosionImage[0].getHeight(null)-height)/2,GameClient.explosionImage));
+
+                return true;
             }
         }
 
-
+        return false;
     }
 }

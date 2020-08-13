@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class GameClient extends JComponent {
 
@@ -13,7 +14,7 @@ public class GameClient extends JComponent {
     private boolean stop;
 
     // 我方坦克
-    private Tank playerTank;
+    private PlayerTank playerTank;
 
     //敵方坦克
     //private List<Tank> enemyTanks = new ArrayList<>();
@@ -22,10 +23,12 @@ public class GameClient extends JComponent {
     //private List<Wall> walls = new ArrayList<>();
 
     //取代 敵方坦克 & Walls
-    private List<GameObject> gameObjects = new ArrayList<>();
+    //private List<GameObject> gameObjects = new ArrayList<>();
+    //避免新增/刪除同步問題, 改用CopyOnWriteArrayList
+    private CopyOnWriteArrayList<GameObject> gameObjects = new CopyOnWriteArrayList<>();
 
     public static Image[] bulletImage = new Image[8];
-
+    public static Image[] explosionImage = new Image[11];
     GameClient() {
         //this.setPreferredSize(new Dimension(800,600));
         this(800, 600);
@@ -75,15 +78,21 @@ public class GameClient extends JComponent {
         }
 
         // 我方坦克
-        playerTank = new Tank(500, 100, Direction.DOWN,iTankImage );
+        playerTank = new PlayerTank(500, 100, Direction.DOWN,iTankImage );
         gameObjects.add(playerTank);
 
         // 敵方坦克數及圖形
         //icon = Tools.getImage("etankU.png");
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 4; j++) {
-                gameObjects.add(new Tank(350 + j * 80, 500 + i * 80, Direction.UP, true,eTankImage));
+                //gameObjects.add(new Tank(350 + j * 80, 500 + i * 80, Direction.UP, true,eTankImage));
+                gameObjects.add(new EnemyTank(350 + j * 80, 500 + i * 80, Direction.UP, true,eTankImage));
             }
+        }
+
+        // 爆炸動畫
+        for (int i=0; i< explosionImage.length; i++){
+                  explosionImage[i] = Tools.getImage(i+".png");
         }
 
         // wall
@@ -134,14 +143,24 @@ public class GameClient extends JComponent {
             object.draw(g);
         }
 
+
         // 回收資源
-        // 使用迭代器進行移除
-        Iterator<GameObject> iterator = gameObjects.iterator();
-        while (iterator.hasNext()){
-            if (!(iterator.next()).alive){
-                iterator.remove();
+        // 使用迭代器進行移除   (CopyOnWriteArrayList 不能用迭代器)
+//        Iterator<GameObject> iterator = gameObjects.iterator();
+//        while (iterator.hasNext()){
+//            if (!(iterator.next()).alive){
+//                iterator.remove();
+//            }
+//        }
+
+        //取代 敵方坦克 & Walls
+        for (GameObject object : gameObjects){
+            if (!object.isAlive()){
+                gameObjects.remove(object);
             }
+
         }
+
         System.out.println(gameObjects.size());     // show create Object Qty
     }
 

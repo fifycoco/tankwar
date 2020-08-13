@@ -64,7 +64,7 @@ public class Tank extends MoveObject {
     }
 
     // 負責偵測坦克碰撞
-    public void collision() {
+    public boolean collision() {
 
         // 2020.08.06 邊界測試
 //        if (x < 0) {
@@ -78,8 +78,12 @@ public class Tank extends MoveObject {
 //        } else if (y > TankGame.gameClient.getScreenheight() - height) {
 //            y = TankGame.gameClient.getScreenheight() - height;
 //        }
-        collisionBound();
+        // 撞 wall : true
+        if (collisionBound()){
+            return true;
+        }
 
+        // 撞 object : true
         for (GameObject object : TankGame.gameClient.getGameObjects()) {
             // 非本身物件
             if (object != this) {
@@ -87,11 +91,11 @@ public class Tank extends MoveObject {
                 if (object.getRectangle().intersects(this.getRectangle())) {
                     x = oldx;
                     y = oldy;
-                    return;
+                    return true;
                 }
             }
         }
-
+        return false;
     }
 
     private void determineDirection() {

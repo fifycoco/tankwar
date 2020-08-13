@@ -78,7 +78,7 @@ public abstract class MoveObject extends GameObject {
     }
 
     // 負責偵測坦克碰撞
-    public abstract void collision();
+    public abstract boolean collision();
 
     public boolean collisionBound() {
         if (x < 0) {
