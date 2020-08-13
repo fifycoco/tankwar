@@ -142,7 +142,7 @@ public class GameClient extends JComponent {
                 iterator.remove();
             }
         }
-        System.out.println(gameObjects.size());
+        System.out.println(gameObjects.size());     // show create Object Qty
     }
 
     // X bar 中點
