@@ -12,6 +12,7 @@ public class GameClient extends JComponent {
     private int screenwidth;
     private int screenheight;
     private boolean stop;
+    private boolean gameOver;
 
     // 我方坦克
     private PlayerTank playerTank;
@@ -58,6 +59,9 @@ public class GameClient extends JComponent {
 
 
     public void init() {
+        gameOver = false;
+        gameObjects.clear();
+
         //Image icon;
         // 指定坦克圖形 by Direction
         // 中心點
@@ -161,7 +165,19 @@ public class GameClient extends JComponent {
 
         }
 
+        if (gameOver){
+            g.setFont(new Font(null, Font.BOLD,100));
+            g.setColor(Color.red);
+            g.drawString("GAME OVER", 150,300);
+            g.setFont(new Font(null, Font.BOLD,50));
+            g.setColor(Color.white);
+            g.drawString("PRESS F2 TO RESTART", 150,500);
+        }
+
         System.out.println(gameObjects.size());     // show create Object Qty
+
+        // check gameOver
+        checkGameStatus();
     }
 
     // X bar 中點
@@ -204,11 +220,18 @@ public class GameClient extends JComponent {
                 //playerTank.setX(playerTank.getX() + playerTank.getSpeed());
                 break;
             case KeyEvent.VK_CONTROL:
-                playerTank.fire();
+                if (!gameOver){
+                playerTank.fire();}
                 break;
             case KeyEvent.VK_A:
-                playerTank.superFire();
+                if (!gameOver) {
+                playerTank.superFire();}
                 break;
+
+            case KeyEvent.VK_F2:
+                if (gameOver) {
+                init();}
+
             default:
         }
 
@@ -272,5 +295,29 @@ public class GameClient extends JComponent {
     // 新增物件
     public void addGameObject(GameObject object){
         gameObjects.add(object);
+    }
+
+    public void checkGameStatus(){
+        if (gameOver){
+            return;
+        }
+        if (!playerTank.alive) {
+            gameOver = true;
+            return;
+        }
+
+//        boolean gameWin = true;
+//        for(GameObject object:gameObjects){
+//            if (object instanceof EnemyTank) {
+//                gameWin = false;
+//            }
+//        }
+//        if (gameWin){
+//            for (int i=0; i<3; i++){
+//                for (int j=0; j<4; j++){
+//                    addGameObject(new EnemyTank(320+j*100,450+100*i, Direction.UP, true, eTankImage));
+//                }
+//            }
+//        }
     }
 }
