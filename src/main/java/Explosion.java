@@ -1,8 +1,12 @@
 import java.awt.*;
 
 public class Explosion extends GameObject{
+
     public Explosion(int x, int y, Image[] image) {
         super(x, y, image);
+
+        // sound for touch wall
+        Tools.playAudio("explode.wav");
 
         new Thread(() -> {
             while (alive) {

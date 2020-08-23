@@ -39,6 +39,10 @@ public class GameClient extends JComponent {
         this.screenwidth = screenwidth;
         this.screenheight = screenheight;
         this.setPreferredSize(new Dimension(screenwidth, screenheight));
+
+        // sound
+        com.sun.javafx.application.PlatformImpl.startup(() -> {});
+
         // initial
         init();
 
@@ -169,6 +173,7 @@ public class GameClient extends JComponent {
             g.setFont(new Font(null, Font.BOLD,100));
             g.setColor(Color.red);
             g.drawString("GAME OVER", 150,300);
+
             g.setFont(new Font(null, Font.BOLD,50));
             g.setColor(Color.white);
             g.drawString("PRESS F2 TO RESTART", 150,500);

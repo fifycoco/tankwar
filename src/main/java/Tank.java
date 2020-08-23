@@ -50,6 +50,10 @@ public class Tank extends MoveObject {
                 y + height / 2 - GameClient.bulletImage[0].getHeight(null) / 2,
                 direction, enemy, GameClient.bulletImage);
         TankGame.gameClient.addGameObject(bullet);
+
+        if (!enemy) {
+            Tools.playAudio("shoot.wav");
+        }
     }
 
     public void superFire(){
